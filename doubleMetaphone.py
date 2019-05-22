@@ -3,6 +3,13 @@
 Created on Tue May 21 16:41:11 2019
 
 @author: Stacy Bridges
+
+rem: add functions to allow hybrid approach:
+    - first pass is for common key and narrowing search pool
+    - second pass is for statistical precision
+    - finally output results, including matches and 
+    -   match-confidence statistics (per record & per file)
+    -   and outliers
 """
 
 from metaphone import doublemetaphone
