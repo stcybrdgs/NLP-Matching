@@ -17,10 +17,6 @@ def double_metaphone(value):
     print(doublemetaphone(value))
     return doublemetaphone(value)
 
-#(Primary Key = Primary Key) = Strongest Match
-#(Secondary Key = Primary Key) = Normal Match
-#(Primary Key = Secondary Key) = Normal Match
-#(Alternate Key = Alternate Key) = Minimal Match
 def double_metaphone_compare(tuple1,tuple2,threshold):
     if threshold == Threshold.WEAK:
         if tuple1[1] == tuple2[1]:
