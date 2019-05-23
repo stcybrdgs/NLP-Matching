@@ -40,11 +40,18 @@ def main():
   
   # prod functions ---------------------
   print('products example:\n')
+
+  # start for
   for line in products:
-    print(line.rstrip())
-  
-  print('\n')
+    nextLine = line.rstrip()
+    nlpNextLine = nlp(nextLine)
     
+    for token in nlpNextLine:
+        print(token.text, token.pos_, token.dep_)
+  
+    print('\n')
+  # end for
+   
   products.close()  
   
   print('Done.')
