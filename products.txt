@@ -1,19 +1,3 @@
 Deep grv bll brng 2710  Timken
-
-["Deep","grve","bll","brng","2710","","Timken",null,null,"",null]
-["Cylind","rllr","brng","4630","","RHP","",null,null,"",null]
-["Bore","Diameter","40mm","inner","ring","width","23","mm","spherial","roller","bearing"]
-["fag","spherical","roller","bore","dw","55","inner","width","25","mm",null]
-["fag","spherical","bearing","bore","di","75","width","inner","31","",null]
-["Cylind","rllr","brng","1260","","NSK","",null,null,"",null]
-["needle","roller","bearins","nkis17","from","ina","",null,null,"",null]
-["needle","roller","bearing","nkis","20","ina","",null,null,"",null]
-["Cylind","rllr","brng","5350","","NSK","",null,null,"",null]
-["Cylind","rllr","brng","8850","","Timken","",null,null,"",null]
-["Cylind","rllr","brng","1260","","NSK","",null,null,"",null]
-["Deep","grve","bll","brng","7060","Pack","tmken",null,null,"",null]
-["Cylind","rllr","brng","7060","ft","SKF","",null,null,"",null]
-["timken","spherical","roller","tpered","55","mm","wir","25mm",null,"",null]
-["Deep","grve","bll","brng","1440","","SKF",null,null,"",null]
-["spherical","roll","nsk","bearing","22211eake4",null,"",null,null,"",null]
-["Deep","grve","bll","brng","8710","","tmken",null,null,"",null]    
+Cylind rllr brng 4630 RHP
+Bore Diameter 40mm inner ring width 23 mm spherial roller bearing
