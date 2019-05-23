@@ -18,23 +18,36 @@ def main():
   str = nlp(str)
   #prod = prod[0]
   
+  print('Start --------------------------')
+  
   # sent functions ----------------------  
+  print('setence example:\n')
   print(sent.text)
   
   for token in sent:
       print(token.text, token.pos_, token.dep_)
 
+  print('\n')
+  
   # str functions ----------------------  
+  print('string example:\n')
   print(str.text)
   
   for token in str:
       print(token.text, token.pos_, token.dep_)
    
+  print('\n')
+  
   # prod functions ---------------------
+  print('products example:\n')
   for line in products:
     print(line.rstrip())
   
+  print('\n')
+    
   products.close()  
+  
+  print('Done.')
     
   
 if __name__ == '__main__' : main()
