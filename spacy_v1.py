@@ -57,21 +57,42 @@ def main():
   
   print('products example 2: ---------------------------')
   # print all data --------------------
-  infile = open('products_DescriptionOnly_short.csv', 'rt')
+  infile = open('products_DescriptionOnly.csv', 'rt')
   fData = infile.read()
   nlpData = nlp(fData)
   print(nlpData)
   
   # print tokens ----------------------
   print('\ntokens:')
-  for tok in nlpData:
-      print('{} -> {}'.format(tok.text, tok.pos_))
+  for tok in nlpData[:6]:
+      print('{} -> {} -> {}'.format(tok.text, tok.pos_, tok.ent_type_))
   
   # print entities --------------------
   print('\nentities:')
   for ent in nlpData.ents:
       print('{} --> {}'.format(ent.string, ent.label_))
     
+  # print persons ---------------------
+  # rem: NLTK comes with pre-trained models for splitting text 
+  #      to sentences and sentences to words
+  print('\n')
+  orgNum = 0
+  carNum = 0
+  perNum = 0
+  print('ORGs:')
+  for ent in nlpData.ents:
+      if ent.label == spacy.symbols.ORG:
+          orgNum += 1
+          print(ent.text)
+      if ent.label == spacy.symbols.CARDINAL:
+          carNum += 1
+      if ent.label == spacy.symbols.PERSON:
+          perNum += 1
+      # end if   
+  print('\n')
+  print('# of ORG: ', orgNum)
+  print('# of CARDINAL: ', carNum)
+  print('# of PERSON: ', perNum)
   infile.close() 
 
   # end program
