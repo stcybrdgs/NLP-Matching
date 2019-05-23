@@ -10,6 +10,8 @@ rem: add functions to allow hybrid approach:
     - finally output results, including matches and 
     -   match-confidence statistics (per record & per file)
     -   and outliers
+    
+rem: using doublemetaphone library    
 """
 
 from metaphone import doublemetaphone
