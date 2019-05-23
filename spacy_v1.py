@@ -56,10 +56,22 @@ def main():
   infile.close()
   
   print('products example 2: ---------------------------')
+  # print all data --------------------
   infile = open('products_DescriptionOnly_short.csv', 'rt')
   fData = infile.read()
   nlpData = nlp(fData)
   print(nlpData)
+  
+  # print tokens ----------------------
+  print('\ntokens:')
+  for tok in nlpData:
+      print('{} -> {}'.format(tok.text, tok.pos_))
+  
+  # print entities --------------------
+  print('\nentities:')
+  for ent in nlpData.ents:
+      print('{} --> {}'.format(ent.string, ent.label_))
+    
   infile.close() 
 
   # end program
