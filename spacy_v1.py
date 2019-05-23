@@ -1,13 +1,23 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 22 2019
-
 @author: Stacy Bridges
 
-rem: using SpaCy library NLP features    
+rem: using SpaCy library NLP features 
+rem: export annotations to numpy arrays
+rem: lu prodigy @ https://prodi.gy/
+
+lu:  
+(spacy POS distinctions)
+JJ NN PRP MD VB IN NNP  
+
+lu: NER returns which labels (token.label_) ? 
 """
 import spacy
 from spacy.lang.en.examples import sentences
+# from spacy import displacy
+# from spacy.lang.en.stop_words import STOP_WORDS
+# spacy provides pre-trained models for syntax
 
 def main():
   nlp = spacy.load('en_core_web_sm')
@@ -52,13 +62,17 @@ def main():
   
       print('\n')
   # end for
-  
+
+  # close input data file
   infile.close()
   
   print('products example 2: ---------------------------')
   # print all data --------------------
   infile = open('products_DescriptionOnly.csv', 'rt')
   fData = infile.read()
+  
+  # the doc object is processed as it is passed
+  # to the language object
   nlpData = nlp(fData)
   print(nlpData)
   
@@ -95,6 +109,34 @@ def main():
   print('# of PERSON: ', perNum)
   infile.close() 
 
+  # examine additional spacy functions
+  print('\nexplore additional spacy functions:')
+  for token in nlpData[:6]:
+      print('token.text: ', token.text) # the original string
+      print('token.pos_: ', token.pos_) # the part of speech
+      print('token.tag_: ', token.tag_) #
+      print('token.dep_: ', token.dep_) # dependency
+      print('token.head.text: ', token.head.text) # navigate up the tree
+      print('token.lefts: ', token.lefts) # left child of head
+      print('token.rights: ', token.rights) # right child of head
+      print('\n-----------------')
+  
+  # apply more spacy features to a string
+  nuDoc = nlp('This is an SKF product called Ball Bearing for $45 USD')
+  for token in nuDoc:
+      print('{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}'.format(
+          token.text,       # original string
+          token.idx,        # index
+          token.lemma_,     # base form of the word
+          token.is_punct,   # bool: is it punctuation
+          token.is_space,   # bool: is it a space
+          token.shape_,     # visual signature ie: Xxxxx
+          token.pos_,       # part of speech
+          token.tag_        # ?  
+      )
+  )
+  # end for
+  
   # end program
   print('\nDone.')
     
