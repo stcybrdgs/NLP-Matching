@@ -179,6 +179,15 @@ def main():
   for token in doc:
       print("{0}/{1} <--{2}-- {3}/{4}".format(token.text, token.tag_, token.dep_, token.head.text, token.head.tag_))
  
+  # test missing entity
+  print('\ntest missing entity ----------------')
+  text = "New iPhone X release date leaked as Apple reveals pre-orders by mistake"  
+  doc = nlp(text) 
+  for ent in doc.ents:
+      print(ent.text, ent.label_)
+  iphone_x = doc[1:3]
+  print('Missing entity: ', iphone_x)
+    
   # end program
   print('\nDone.')
     
