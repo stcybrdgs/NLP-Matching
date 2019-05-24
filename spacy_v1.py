@@ -26,7 +26,8 @@ from spacy.matcher import Matcher
 def main():
   nlp = spacy.load('en_core_web_sm')
   
-  # sent functions ----------------------  
+  
+  # sentence functions 
   print('setence example: ---------------------------')
   sent = nlp(sentences[0])
   print(sent.text)
@@ -36,7 +37,8 @@ def main():
 
   print('\n')
   
-  # str functions ----------------------  
+  
+  # string example functions 
   print('string example: ---------------------------')
   sampleString = u"I can't imagine spending $3000 for a single bedroom apartment in N.Y.C."
   str = nlp(sampleString)
@@ -47,7 +49,8 @@ def main():
    
   print('\n')
   
-  # product file functions ---------------------
+  
+  # product file functions 
   print('products example 1: ---------------------------')
   infile = open('products_DescriptionOnly_short.csv', 'rt')
   print(infile.read(), '\n')
@@ -70,8 +73,10 @@ def main():
   # close input data file
   infile.close()
   
+  
+  # product file functions (2)
   print('products example 2: ---------------------------')
-  # print all data --------------------
+  # print all data 
   infile = open('products_DescriptionOnly.csv', 'rt')
   fData = infile.read()
   
@@ -80,17 +85,17 @@ def main():
   nlpData = nlp(fData)
   print(nlpData)
   
-  # print tokens ----------------------
+  # print tokens
   print('\ntokens:')
   for tok in nlpData[:6]:
       print('{} -> {} -> {}'.format(tok.text, tok.pos_, tok.ent_type_))
   
-  # print entities --------------------
+  # print entities
   print('\nentities:')
   for ent in nlpData.ents:
       print('{} --> {}'.format(ent.string, ent.label_))
     
-  # print persons ---------------------
+  # print persons
   # rem: NLTK comes with pre-trained models for splitting text 
   #      to sentences and sentences to words
   print('\n')
@@ -113,8 +118,9 @@ def main():
   print('# of PERSON: ', perNum)
   infile.close() 
 
+
   # examine additional spacy functions
-  print('\nexplore additional spacy functions:')
+  print('\nexplore additional spacy functions: ---------------')
   for token in nlpData[:6]:
       print('token.text: ', token.text)             # the original string
       print('token.ent_type_: ', token.ent_type_)   # entity
@@ -143,11 +149,13 @@ def main():
   )
   # end for
   
+  
   # test displaCy
   # viewable in jupyter notebook
-  print('\ndisplaCy snippet for jupyter notebook')
+  print('\ndisplaCy snippet for jupyter notebook ---------------------------')
   doc = nlp('I just bought 2 shares at 9 a.m. because the stock went up 30% in just 2 days according to the WSJ')
   displacy.render(doc, style='ent', jupyter=True)
+  
   
   # test the chunker
   print('\ntest the chunker 1 -----------')
@@ -155,15 +163,19 @@ def main():
   for chunk in doc.noun_chunks:
       print(chunk.text, chunk.label_, chunk.root.text)
   
+  
+  # test the chunker  
   print('\ntest the chunker 2 -----------')
   doc = nlp('Bore Diameter 40mm inner ring width 23 mm spherial roller bearing')
   for chunk in doc.noun_chunks:
       print(chunk.text, chunk.label_, chunk.root.text)
       
+      
   # test span object
   print('\ntest span object -----------')    
   span = doc[2:6] # 40mm inner ring   
   print(span.text)
+  
   
   # test lexical attributes
   print('\ntest lexical attributes ---------------')
@@ -175,12 +187,14 @@ def main():
   print('is_punct:', [token.is_punct for token in doc])
   print('like_num:', [token.like_num for token in doc])
   
+  
   # test the dependency parcer
   print('\ntest the dependency parcer -----------')
   doc = nlp('Wall Street Journal just published an interesting piece on crypto currencies')
   for token in doc:
       print("{0}/{1} <--{2}-- {3}/{4}".format(token.text, token.tag_, token.dep_, token.head.text, token.head.tag_))
  
+    
   # test missing entity
   print('\ntest missing entity 1 ----------------')
   text = "New iPhone X release date leaked as Apple reveals pre-orders by mistake"  
@@ -190,6 +204,7 @@ def main():
   iphone_x = doc[1:3]
   print('Missing entity: ', iphone_x)
     
+  
   # test the matcher 
   print('\ntest the matcher --------------')
   # when spacy cannot match an entity, you can write a new rule
@@ -212,6 +227,47 @@ def main():
   
   # 6. Iterate over the matches and get the matched span from the start to the end index.
   print("Matches:", [doc[start:end].text for match_id, start, end in matches])
+  for ent in doc.ents:
+      print(ent.text, ent.label_)
+  
+    
+  # writing match patterns
+  # you can write more complex match patterns using
+  # different token attirbutes and operators
+  print('\nwriting match patterns 1 --------------')   
+  # write one pattern that only matches mentions
+  # of the full iOS versions: iOS 7, iOS 10, iOS 11
+  matcher = Matcher(nlp.vocab) # LU nlp.vocab
+  
+  doc = nlp(
+      "After making the iOS update, you won't notice a radical system-wide redesign: nothing like the aesthetic upheaval we got with iOS 7 ."
+      "Most of iOS 11's furniture remains the same as in iOS 10 ."
+      "But, you will discover some tweaks once you delve a little deeper."
+      "Testing: iOS 7, iOS 10, iOS 11, iOS 7 ."
+      )
+  
+  # Write a pattern for full iOS versions ("iOS 7", "iOS 11", "iOS 10")
+  pattern = [{"TEXT": "iOS"}, {"IS_DIGIT": True}]
+
+  # Add the pattern to the matcher and apply the matcher to the doc
+  matcher.add("IOS_VERSION_PATTERN", None, pattern)
+  matches = matcher(doc)
+  print("Total matches found:", len(matches))
+
+  # Iterate over the matches and print the span text
+  for match_id, start, end in matches:
+      print("Match found:", doc[start:end].text)
+  
+    
+  # writing match patterns
+  print('\nwriting match patterns 2 --------------')   
+  doc = nlp("I need to download some stuff. I need to download PIP and to download Py, but downloading other stuff is not necessary.")
+  pattern = [{"LEMMA":"download"}, {"POS":"PROPN"}]
+  matcher.add("DOWNLOAD_STUFF_PATTERN", None, pattern)
+  matches = matcher(doc)
+  print("Total matches found: ", len(matches))
+  for match_id, start, end in matches:
+      print("Match found: ", doc[start:end].text)
   
   # end program
   print('\nDone.')
