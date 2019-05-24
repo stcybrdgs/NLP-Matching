@@ -1,0 +1,1 @@
+Proof of concept scripts in jellyfish and spaCy. This set of scripts explores techniques in approximate string matching to support a project mapping multiple ERP product tables to a data-management master.
