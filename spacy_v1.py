@@ -11,10 +11,12 @@ lu:
 (spacy POS distinctions)
 JJ NN PRP MD VB IN NNP  
 
-lu: NER returns which labels (token.label_) ? 
+lu: NER returns which labels (token.label_) ?
+iob tagging = IOB: inside/outside/beginning of entity 
 """
 import spacy
 from spacy.lang.en.examples import sentences
+from spacy import displacy
 # from spacy import displacy
 # from spacy.lang.en.stop_words import STOP_WORDS
 # spacy provides pre-trained models for syntax
@@ -112,13 +114,15 @@ def main():
   # examine additional spacy functions
   print('\nexplore additional spacy functions:')
   for token in nlpData[:6]:
-      print('token.text: ', token.text) # the original string
-      print('token.pos_: ', token.pos_) # the part of speech
-      print('token.tag_: ', token.tag_) #
-      print('token.dep_: ', token.dep_) # dependency
-      print('token.head.text: ', token.head.text) # navigate up the tree
-      print('token.lefts: ', token.lefts) # left child of head
-      print('token.rights: ', token.rights) # right child of head
+      print('token.text: ', token.text)             # the original string
+      print('token.ent_type_: ', token.ent_type_)   # entity
+      print('token.ent_iob_: ', token.ent_iob_)     # ?
+      print('token.pos_: ', token.pos_)             # the part of speech
+      print('token.tag_: ', token.tag_)             # ?
+      print('token.dep_: ', token.dep_)             # dependency
+      print('token.head.text: ', token.head.text)   # navigate up the tree
+      print('token.lefts: ', token.lefts)           # left child of head
+      print('token.rights: ', token.rights)         # right child of head
       print('\n-----------------')
   
   # apply more spacy features to a string
@@ -137,6 +141,29 @@ def main():
   )
   # end for
   
+  # test displaCy
+  # viewable in jupyter notebook
+  print('\ndisplaCy snippet for jupyter notebook')
+  doc = nlp('I just bought 2 shares at 9 a.m. because the stock went up 30% in just 2 days according to the WSJ')
+  displacy.render(doc, style='ent', jupyter=True)
+  
+  # test the chunker
+  print('\ntest the chunker 1 -----------')
+  doc = nlp("Wall Street Journal just published an interesting piece on crypto currencies")
+  for chunk in doc.noun_chunks:
+      print(chunk.text, chunk.label_, chunk.root.text)
+  
+  print('\ntest the chunker 2 -----------')
+  doc = nlp('Bore Diameter 40mm inner ring width 23 mm spherial roller bearing')
+  for chunk in doc.noun_chunks:
+      print(chunk.text, chunk.label_, chunk.root.text)
+      
+  # test the dependency parcer
+  print('\ntest the dependency parcer -----------')
+  doc = nlp('Wall Street Journal just published an interesting piece on crypto currencies')
+  for token in doc:
+      print("{0}/{1} <--{2}-- {3}/{4}".format(token.text, token.tag_, token.dep_, token.head.text, token.head.tag_))
+ 
   # end program
   print('\nDone.')
     
