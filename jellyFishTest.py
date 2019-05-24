@@ -58,6 +58,8 @@ def main():
     print('Jaro-Winkler Distance: ', r)
     
     # Match Rating Approach (comparison)
+    r = jellyfish.match_rating_comparison(str1, str2)
+    print('Match Rating Comparison: ', r)
  
     
     
