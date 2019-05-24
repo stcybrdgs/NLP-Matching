@@ -158,6 +158,21 @@ def main():
   for chunk in doc.noun_chunks:
       print(chunk.text, chunk.label_, chunk.root.text)
       
+  # test span object
+  print('\ntest span object -----------')    
+  span = doc[2:6] # 40mm inner ring   
+  print(span.text)
+  
+  # test lexical attributes
+  print('\ntest lexical attributes ---------------')
+  doc = nlp("It costs $5.")
+  print('Text:    ', 'It costs $5')
+  print('Index:   ', [token.i for token in doc])
+  print('Text:    ', [token.text for token in doc])
+  print('is_alpha:', [token.is_alpha for token in doc])
+  print('is_punct:', [token.is_punct for token in doc])
+  print('like_num:', [token.like_num for token in doc])
+  
   # test the dependency parcer
   print('\ntest the dependency parcer -----------')
   doc = nlp('Wall Street Journal just published an interesting piece on crypto currencies')
