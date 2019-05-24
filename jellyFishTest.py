@@ -75,8 +75,7 @@ def main():
     r = jellyfish.match_rating_comparison(str1, str2)
     print('Match Rating Comparison: ', r)
      
-    
-    
+        
     # end program
     print('Done.')
     
