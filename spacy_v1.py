@@ -17,6 +17,8 @@ iob tagging = IOB: inside/outside/beginning of entity
 import spacy
 from spacy.lang.en.examples import sentences
 from spacy import displacy
+from spacy.matcher import Matcher
+
 # from spacy import displacy
 # from spacy.lang.en.stop_words import STOP_WORDS
 # spacy provides pre-trained models for syntax
@@ -180,7 +182,7 @@ def main():
       print("{0}/{1} <--{2}-- {3}/{4}".format(token.text, token.tag_, token.dep_, token.head.text, token.head.tag_))
  
   # test missing entity
-  print('\ntest missing entity ----------------')
+  print('\ntest missing entity 1 ----------------')
   text = "New iPhone X release date leaked as Apple reveals pre-orders by mistake"  
   doc = nlp(text) 
   for ent in doc.ents:
@@ -188,6 +190,29 @@ def main():
   iphone_x = doc[1:3]
   print('Missing entity: ', iphone_x)
     
+  # test the matcher 
+  print('\ntest the matcher --------------')
+  # when spacy cannot match an entity, you can write a new rule
+  # to allow for future matches
+  # 1. Import the Matcher from spacy.matcher (imported in header)
+  nlp = spacy.load('en_core_web_sm')
+  doc = nlp(text) # see text string above
+  
+  # 2. Initialize it with the nlp object’s shared vocab.
+  matcher = Matcher(nlp.vocab)
+  
+  # 3. Create a pattern that matches the 'TEXT' values of two tokens: "iPhone" and "X".
+  pattern = [{"TEXT": "iPhone"}, {"TEXT": "X"}]
+  
+  # 4. Use the matcher.add method to add the pattern to the matcher.
+  matcher.add("IPHONE_X_PATTERN", None, pattern)
+  
+  # 5. Call the matcher on the doc and store the result in the variable matches.
+  matches = matcher(doc)
+  
+  # 6. Iterate over the matches and get the matched span from the start to the end index.
+  print("Matches:", [doc[start:end].text for match_id, start, end in matches])
+  
   # end program
   print('\nDone.')
     
