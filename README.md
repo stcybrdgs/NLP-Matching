@@ -1,2 +1,2 @@
 # NLP Matching
-This set of scripts uses jellyfish and spaCy to explore techniques in NLP and approximate string matching in support of a project mapping product tables between multiple ERPs and a data-management master.
+These scripts use jellyfish and spaCy to explore techniques in NLP and Approximate String Matching for a project that maps products between multiple ERPs and a master data store.
