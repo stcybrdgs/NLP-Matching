@@ -58,11 +58,17 @@ def main():
   print('guitar string:\t', guitar_string)  
   
   # practice 2: 
-  print('\npractice 1: English & German nlp obj ----------------------')
-  bowie_id = doc.vocab.strings['guitar']
-  print('bowie_id: ', bowie_id)
-  print('bowie hash:', doc.vocab.strings[13533102915073649304])
+  print('\npractice 2: insert into EN vocab but not DE vocab ------')
+  #    get the ID for the string 'Jazz'
+  jazz_id = nlp.vocab.strings['Jazz']
+  print(jazz_id)
+  # print(nlp.vocab.strings[jazz_id]) # throws error
+  jazz_id = nlp('Jazz')
+  print(jazz_id)
+  print(jazz_id.vocab.strings[16658944612980789447])
   
+  #    look up the ID for 'Jazz' in the vocab
+  #print('Jazz in EN vocab: ', nlp.vocab.strings[jazz_id])
   
   # end program
   print('\nDone.')
