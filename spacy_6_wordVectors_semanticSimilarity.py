@@ -52,7 +52,21 @@ def main():
   
   # end program
   print('\nDone.')
+  
+  # another similarity exercise
+  # to reinforce how to create vars for 
+  # tokens and spans...
+  # Compare a document to a token
+  print('Comparing doc to token: -----------------')
+  doc = nlp("I like home-made pizza")
+  token = nlp("onions")[0]
+  print(doc.similarity(token))
     
+  # Compare a span with a document
+  print('Comparing doc to span: -----------------')
+  span = nlp("I like salads with chicken fingers")[2:5]
+  doc = nlp("Hutts sells hamburgers")
+  print(span.similarity(doc))  
   
 if __name__ == '__main__' : main()
     
