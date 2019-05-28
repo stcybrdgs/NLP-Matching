@@ -11,22 +11,26 @@ import spacy
 # import the Doc and Span classes from spaCy tokens
 # from spacy.tokens import Doc, Span  
 
-
 def main():
   nlp = spacy.load('en_core_web_sm') 
   doc = nlp('Berlin is a nice city')
   
   # get all tokens and pos tags
-  token_texts = [token.text for token in doc]
-  pos_tags = [token.pos for token in doc]
+  # USE NATIVE TOKEN ATTRIBUTES INSTEAD OF
+  # LISTS OF token_texts AND pos_tags
+  # THEN, CONVERT THE RESULTS TO STRINGS AS 
+  # LATE AS POSSIBLE... ie, avoid doing this:
+  #     token_texts = [token.text for token in doc]
+  #     pos_tags = [token.pos for token in doc]
   
-  for index, pos in enumerate(pos_tags):
+  # iterate over the tokens:
+  for token in doc:
+      print(token.pos_)
       # check if the current token is a proper noun
-      if pos = 'PROPN':
+      if token.pos_ == 'PROPN':
           # check if the next token is a verb
-          if pos_tags[index + 1] == 'VERB':
-              result = token_texts[index]
-              print('Found proper noun before a verb: ', result)
+          if doc[token.i + 1].pos_ == 'VERB':
+              print('Found proper noun before a verb: ', token.text)
   
   # end program
   print('\nDone.')
