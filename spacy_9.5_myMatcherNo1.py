@@ -8,6 +8,13 @@ Efficient Phrase Matching
  - Takes Doc object as patterns
  - More efficient and faster than the Matcher
  - Great for matching large word lists
+ 
+ - pumps and ball bearings taxonomies
+ - use the taxonomies as new patterns for the matcher
+ - consider each product entry to be a separate doc OR
+ - make sure the product id and it's description are coupled in 
+   sequence, and then take an entire set of product descriptions as a 
+   single doc, where the processor uses the ID as a delimiter
 
 """
 import spacy
@@ -20,17 +27,18 @@ def main():
     nlp = spacy.load('en_core_web_sm')
     matcher = PhraseMatcher(nlp.vocab)
     
-    pattern1 = nlp('Golden Retriever')
-    pattern2 = nlp('Chicken')
-    matcher.add('DOG', None, pattern1)
-    matcher.add('FOWL', None, pattern2)
-    doc = nlp("I have a Golden Chicken and a Golden Retrievable Fish and a Golden Retriever")
+    pattern1 = nlp('brng')
+    pattern2 = nlp('bearing')
+    matcher.add('BEARING', None, pattern1)
+    matcher.add('BEARING', None, pattern2)
+    doc = nlp('123 Deep grve bll brng 2710 Timken, 456 Cylind rllr brng 4630 RHP, 789 Bore Diameter 40mm inner ring width 23 mm spherial roller bearing')
     
     # Iterate over the matches
     for match_id, start, end in matcher(doc):
         # Get the matched span
         span = doc[start:end]
         print('Matched span:', span.text)
+
   
 if __name__ == '__main__' : main()  
     
