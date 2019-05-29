@@ -16,6 +16,13 @@ Efficient Phrase Matching
    sequence, and then take an entire set of product descriptions as a 
    single doc, where the processor uses the ID as a delimiter
 
+ - PhraseMatcher performs keyword search on a doc, but instead
+   of only finding strings, it gives you direct access to 
+   the tokens in context.
+ - PhraseMatcher takes Doc objects as patterns.
+ - It is great for matching large dictionaries and word lists
+   on large volumes of text.
+
 """
 import spacy
 # import the Doc and Span classes from spaCy tokens
