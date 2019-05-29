@@ -68,6 +68,12 @@ def main():
   doc = nlp("Hutts sells hamburgers")
   print(span.similarity(doc))  
   
+  # Compare a span with a document
+  print('Comparing token to token: -----------------')
+  doc = nlp("Hutts sells really good shakes and hamburgers")
+  token1, token2 = doc[4], doc[6]
+  print(token1.similarity(token2))  
+  
 if __name__ == '__main__' : main()
     
     
