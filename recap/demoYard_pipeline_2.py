@@ -4,81 +4,76 @@ Created on Thu May 30 16:14:46 2019
 @author: Stacy
 
 PIPELINES
-You can customize the pipeline components to:
-•	make a function execute automatically when you call nlp
-•	add your own metadata to documents and tokens
-•	update built-in-attributes like doc.ents
-•   compute your own values based on tokens and their attributes
-•   add named entities, for example based on a dictionary
-
-PIPELINE:
-load language model
-create an nlp object by running a doc through the pipeline:
-     tokenizer           tokenize he text
-     custom compnents
-     tagger              part-of-speech tagger
-     parser              dependency parser
-     ner                 named entity recognizer
-    
-a pipeline component is a function that takes a doc, modifies it, 
-and returns it. A custom pipeline component can be added using 
-the nlp.add_pipe method (the tokenizer always runs first, followed
-by whichever component is at the head of the pipeline):
-
-    ex:
-    nlp.add_pipe(custom_component)	
-   
-    def custom_component(doc):
-        # do something to the doc
-        return doc
-    ex: 
-    nlp.add_pipe(component, last=True)  # add last in pipeline
-    nlp.add_pipe(component, first=True)  # add first in pipeline
-    nlp.add_pipe(component, before='ner')  # add before ner component
-    nlp.add_pipe(component, after='tagger')  # add after tagger component
+The processing pipeline always depends on the statistical model 
+and its capabilities. For example, a pipeline can only include an 
+entity recognizer component if the model includes data to make 
+predictions of entity labels. This is why each model will specify 
+the pipeline to use in its meta data, as a simple list containing 
+the component names.
 
 
 """
+# IMPORTS -------------------------------------------------
 import spacy
+from spacy.matcher import PhraseMatcher
+from spacy.tokens import Span
 
+# GLOBALS -------------------------------------------------
+nlp = spacy.load('en_core_web_sm')
+matcher = PhraseMatcher(nlp.vocab)
 
-# CREATE A PIPELINE COMPONENT -----------------------------
-def custom_component(doc):
-    # print doc length (ie, number of tokens)
-    print('doc length: ', len(doc))
+# FUNCTIONS -----------------------------------------------
+def product_component(doc):
+    # apply the matcher to the doc
+    matches = matcher(doc)
     
-    # return doc object
+    # create a span for each match and assign the label 'PRODUCT'
+    spans = [Span(doc, start, end, label="PRODUCT") for match_id, start, end in matches]
+
+    # overwrite the doc.ents with the matched spans
+    doc.ents = spans
     return doc
 
-# MAIN PROGRAM --------------------------------------------
+# MAIN PROGRAM ---------------------------------------------
 def main():
-    nlp = spacy.load('en_core_web_sm')
+    products = ['roller bearing',
+                'bll brng',
+                'Polishers',
+                'Buffers'
+                ]
+    doc = nlp.pipe(products)
+    product_patterns = list(doc)
+    print('product_patterns: ', product_patterns)
+    matcher.add('PRODUCT', None, *product_patterns)
+   
+    '''
+    # test
+    i = 0
+    for item in product_patterns:
+        print(product_patterns[i])
+        i += 1
+    '''
     
-    # ADD A CUSTOM PIPELINE COMPONENT ----------------------
-    # add the component to the front of the pipeline
-    nlp.add_pipe(custom_component, first=True)
+    # add the component to the pipeline after the'ner' component
+    nlp.add_pipe(product_component, after='ner')
+    print('\npipe names: ', nlp.pipe_names)
     
-    # METHOD TO READ FILE INTO NLP DOC AND  ---------------
-    # THEN PRINT SENTENCE BY SENTENCE
-    # read products info into an nlp doc
+    # process the text 
     inFile = open('products_DescriptionOnly_short.csv', 'rt')
     doc = nlp(inFile.read())
     inFile.close()
     
-    # store each record as an index in a list
+    # store each doc record as an index in a list
     records = list(doc.sents)
     
     # print each record
+    print('\nproduct descriptions: ')
     for record in records:
-        print(record)
-   
-    # print a list of the pipeline component names
-    print('\npipeline components: ', nlp.pipe_names)
-    # print(nlp.pipeline)
+        print(record)    
     
-    # print document entities:
-    for ent in doc.ents:
-        print(ent.text, ent.start_char, ent.end_char, ent.label_)
+    # print the text and label for the doc.ents
+    print('\ntext and labels for doc.ents: ')
+    print([(ent.text, ent.label_) for ent in doc.ents])
     
     # end program
     print('\nDone.')
