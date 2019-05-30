@@ -4,7 +4,7 @@ Created on Tue May 28 2019
 @author: Stacy Bridges
 
 Efficient Phrase Matching
- - raseMatcher like regular expressions or keyword search – but with access to the tokens!
+ - PhraseMatcher like regular expressions or keyword search – but with access to the tokens!
  - Takes Doc object as patterns
  - More efficient and faster than the Matcher
  - Great for matching large word lists
@@ -12,7 +12,7 @@ Efficient Phrase Matching
  - pumps and ball bearings taxonomies
  - use the taxonomies as new patterns for the matcher
  - consider each product entry to be a separate doc OR
- - make sure the product id and it's description are coupled in 
+ - make sure the product id and its description are coupled in 
    sequence, and then take an entire set of product descriptions as a 
    single doc, where the processor uses the ID as a delimiter
 
