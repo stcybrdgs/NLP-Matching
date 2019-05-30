@@ -40,8 +40,8 @@ rem:
     .is_oov       is the token out-of-vocabulary?
     
 """
-import spacy
 
+import spacy
 def main():
   nlp = spacy.load('en_core_web_sm')
   
@@ -69,9 +69,16 @@ def main():
       # token functions 2
       print('token functions 2: ----------------------')
       for token in nlpStr:
-          print(token.text, token.lower_, token.shape_, token.pos_, token.tag_, )
+          print(token.text, token.lower_, token.shape_, token.pos_, token.tag_, token.lang_)
           
       print('\n')
+      
+      # token comparisons
+      print('token comparisons: ----------------------')
+      for token in nlpStr:
+          if token.is_alpha: print(token.text, ' ALPHA')
+          if token.is_digit: print(token.text, ' DIGITS')
+          if token.like_num: print(token.text, ' LIKE NUM')
 
   # end for
 
