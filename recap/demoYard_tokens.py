@@ -13,13 +13,32 @@ rem:
     The Python-level Token and Span objects are views of this array, 
     i.e. they don’t own the data themselves.
     
-    token.sent    the sentence span that the token is a part of
-    token.text    verbatim text content
-    token.vocab   the vocab object of the parent doc
-    token.i       the index of the token within the parent document
-    token.lemma_  base form of the token with no inflectional suffixes
-    token.lower_  lowercase form of the token, equivqlent to token.text.lower()
-
+    token functions: ---------------------
+    .sent    the sentence span that the token is a part of
+    .text    verbatim text content
+    .vocab   the vocab object of the parent doc
+    .i       the index of the token within the parent document
+    .lemma_  base form of the token with no inflectional suffixes
+    .lower_  lowercase form of the token, equivqlent to token.text.lower()
+    .shape   transform the token's string to show orthographic features, ie 'Xxxx'
+    .pos_    coarse-grained part of speech
+    .tag_    fine-grained part of speech
+    .dep_    syntactic dependency relation
+    .lang_   language of the parent document's vocabulary
+    
+    booleans: -----------------------------
+    .is_alpha     does it consist of alphabetic chars?
+    .is_digit     does it consist of digits?
+    .is_lower     does it consist of all lowercase?
+    .is_upper     does it consist of all uppercase
+    .is_punct     is it punctuation?
+    .is_space     is it whitespace?
+    .is_bracket   is the token a bracket?
+    .is_quote     is the token a quotation mark?
+    .is_currency  is the token a currency symbol?
+    .like_num     is it like a number?
+    .is_oov       is the token out-of-vocabulary?
+    
 """
 import spacy
 
@@ -50,7 +69,8 @@ def main():
       # token functions 2
       print('token functions 2: ----------------------')
       for token in nlpStr:
-          print(token.text, token.lower_)
+          print(token.text, token.lower_, token.shape_, token.pos_, token.tag_, )
+          
       print('\n')
 
   # end for
