@@ -12,18 +12,32 @@ rem:
 rem:
     a span is a user-specified slice from a doc object.
     .doc      the parent doc
+    .sent     the sentence span that this span is part of
     .start    int  the index of the first token of the span
     .end      int  the index of the first token after the span
-    .label    int  the label to attach to the span
+    .text     unicode representation of the span text
+    .label_    the label to attach to the span
+    .lemma_    the span's lemma
     .vector   a meaning representation of the span
     .ents     the named entities in the span
-   
-    
+    .start    int the index of the first token of the span
+    .end      int the index of the first token after the span
+    .similarity  make a similarity estimate
+    .as_doc   create a new Doc object corresponding to the Span
     
 rem:
     see Span.to_array method at https://spacy.io/api/span
 
-    ex:
+rem:
+    if the model you are using has no word vectors loaded, the result of 
+    Span.similarity will be based on the tagger, parser and NER, which may 
+    not give useful similarity judgements. This may happen if you're using one of 
+    the small models, e.g. `en_core_web_sm`, which don't ship with word 
+    vectors and only use context-sensitive tensors. You can always add 
+    your own word vectors, or use one of the larger models instead if 
+    available.
+
+ex:
     from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA
     doc = nlp(u"I like New York in Autumn.")
     span = doc[2:3]
@@ -32,6 +46,7 @@ rem:
     
     # application would be to port NLP strings into arrays for 
     # analysis in numPy
+    
 """
 
 import spacy
@@ -63,9 +78,13 @@ def main():
                   token.text, 
                   span1.text, span1.label_,
                   span2.text, span2.label_,
-                  span.ents.label_
+                  # span1.ents,
+                  span1.lemma_
                   )
           )
+      # compare = span1.similarity(span2)
+      # print(compare)
+          
       print('\n')
 
    
