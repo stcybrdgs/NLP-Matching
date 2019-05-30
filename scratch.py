@@ -13,6 +13,7 @@ def main():
     nlp = spacy.load('en_core_web_sm')
     
     # import a text
+    print('imported sentences document ----------------')
     from spacy.lang.en.examples import sentences
 
     # print the text
@@ -22,7 +23,9 @@ def main():
         print(doc.text)
         index += 1
         
-    # import product des riptions
+    # import product descriptions
+    print('\n')
+    print('imported products doc ----------------')
     inFile = open('products.txt', 'rt')
     
     for line in inFile:
@@ -31,6 +34,18 @@ def main():
    
     inFile.close()    
         
+    # import product descriptions
+    print('\n')
+    print('imported products doc to nlp obj ----------------')
+    inFile = open('products.txt', 'rt')
+    doc = nlp(inFile.read())
+    inFile.close()
+    
+    # print method
+    for token in doc:
+        print(token.text, '-->', token.pos_)
+        #index += 1
+    
     # end program
     print('Done.')
     
