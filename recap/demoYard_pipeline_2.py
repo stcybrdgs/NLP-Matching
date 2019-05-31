@@ -14,6 +14,7 @@ the component names.
 
 """
 # IMPORTS -------------------------------------------------
+import csv
 import spacy
 from spacy.matcher import PhraseMatcher
 from spacy.tokens import Span
@@ -41,6 +42,7 @@ def main():
                 'Polishers',
                 'Buffers'
                 ]
+    
     doc = nlp.pipe(products)
     product_patterns = list(doc)
     print('product_patterns: ', product_patterns)
@@ -59,9 +61,9 @@ def main():
     print('\npipe names: ', nlp.pipe_names)
     
     # process the text 
-    inFile = open('products_DescriptionOnly_short.csv', 'rt')
-    doc = nlp(inFile.read())
-    inFile.close()
+    infile = open('products_DescriptionOnly_short.csv', 'rt')
+    doc = nlp(infile.read())
+    infile.close()
     
     # store each doc record as an index in a list
     records = list(doc.sents)
