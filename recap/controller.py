@@ -12,7 +12,8 @@ rem: use case: convert us date to uk date
 # IMPORTS  ------------------------------
 import jellyfish
 import spacy
-
+from spacy.matcher import PhraseMatcher
+nlp = spacy.load('en_core_web_sm')
 
 # FUNCTIONS  -----------------------------
 def menu():
@@ -23,7 +24,7 @@ def menu():
     print('\nWX MATCHING ENGINE:')
     print('1  -  Tokenizer')
     print('2  -  Tagger')
-    print('3  -  Parser')
+    print('3  -  Entity Parser')
     print('4  -  NER')
     print('5  -  Matcher')
     print('\nPHONETIC ENCODING:\t STRING COMPARISON:')
@@ -35,27 +36,108 @@ def menu():
     # ----  end function  ----
 
 def tokenizer():
-    print('tokenizer')
+    print('Running Tokenizer...\n')
     
+    # read in the product descriptions
+    print('read product descriptions: --------')
+    infile = open('products_DescriptionOnly_short.csv', 'rt')
+    print(infile.read(), '\n')
+    infile.seek(0) # reset cursor
+    
+    # demonstrate token functions
+    # parse into tokens:
+    for line in infile:
+        nextLine = line.rstrip()
+        nlpStr = nlp(nextLine)
+     
+        # token functions 1
+        print('parse into tokens: ----------------------')
+        for token in nlpStr:
+            print(token.text)
+        
+        print('\n')
+    
+    infile.close()
     # ----  end function  ----
     
 def tagger():
-    print('tagger')
+    print('Running Tagger...\n')
+    
+    # read in the product descriptions
+    print('read product descriptions: --------')
+    infile = open('products_DescriptionOnly_short.csv', 'rt')
+    print(infile.read(), '\n')
+    infile.seek(0) # reset cursor
+    
+    # print pos, tag, shape
+    # infile.seek(0) # reset cursor
+    for line in infile:
+        nextLine = line.rstrip()
+        nlpStr = nlp(nextLine)
+     
+        # token functions 1
+        print('Create Tags: Token - POS - Shape - Dependency: ----------------------')
+        for token in nlpStr:
+            print(token.text,' - ',token.pos_,' - ',token.tag_,' - ',token.shape_, ' - ', token.dep_)
+        
+        print('\n')
+
+    infile.close()
+    # ----  end function  ----
     
     # ----  end function  ----
 
 def parser():
-    print('parser')
+    print('Running Entity Parser...\n')
     
+    # read in the product descriptions
+    print('read product descriptions: --------')
+    infile = open('products_DescriptionOnly_short.csv', 'rt')
+    print(infile.read(), '\n')
+    infile.seek(0) # reset cursor
+    
+    # test
+    infile.seek(0) # reset cursor
+    data = infile.read()
+    nlpData = nlp(data)
+    print('Find entities and labels: ----------------------')
+    for ent in nlpData.ents:
+        print('{} --> {}'.format(ent.string, ent.label_))
+        
+    print('\n')
+    
+    infile.close()
     # ----  end function  ----
 
 def ner():
-    print('ner')
+    print('The ner module is disconnected...')
     
     # ----  end function  ----
 
 def matcher():
-    print('matcher')
+    print('Running the Phrase Matcher...\n')
+    matcher = PhraseMatcher(nlp.vocab)
+    
+    print('Input doc:')
+    print('123 Deep grve bll brng 2710 Timken')
+    print('456 Cylind rllr brng 4630 RHP')
+    print('789 Bore Diameter 40mm inner ring width 23 mm spherial roller bearing')
+    print('\n')
+    
+    print('add new string patterns to matcher: brng, bearing...')
+    print('search doc and return matches...\n')
+    
+    pattern1 = nlp('brng')
+    pattern2 = nlp('bearing')
+    matcher.add('BEARING', None, pattern1)
+    matcher.add('BEARING', None, pattern2)
+    doc = nlp('123 Deep grve bll brng 2710 Timken, 456 Cylind rllr brng 4630 RHP, 789 Bore Diameter 40mm inner ring width 23 mm spherial roller bearing')
+    
+    # Iterate over the matches
+    for match_id, start, end in matcher(doc):
+        # Get the matched span
+        span = doc[start:end]
+        print('Matched span:', span.text)
     
     # ----  end function  ----
     
@@ -106,12 +188,40 @@ def nysiis():
     # ----  end function  ----
     
 def levenshtein():
-    print('levenshtein')
+    print('Running Levenshtein Distance (similarity as a function of distance)')
+    b1 = 'Ball Bearing'
+    b2 = 'bll brng'
+    c1 = 'Centrifugal' 
+    c2 = 'centrifigal'
+    p1 = 'PUmp'
+    p2 = 'pmp'
+    
+    b = jellyfish.levenshtein_distance(b1, b2)
+    c = jellyfish.levenshtein_distance(c1, c2)
+    p = jellyfish.levenshtein_distance(p1, p2)
+    
+    print('Ball Bearing -> bll brng: ', b)
+    print('Centrifugal -> centrifigal: ', c)
+    print('PUmp -> pmp: ', p)
     
     # ----  end function  ----    
     
 def jaroWinkler():
-    print('jaroWinkler')
+    print('Running Jaro-Winkler Distance (similarity as a function of distance)')
+    b1 = 'Ball Bearing'
+    b2 = 'bll brng'
+    c1 = 'Centrifugal' 
+    c2 = 'centrifigal'
+    p1 = 'PUmp'
+    p2 = 'pmp'
+    
+    b = jellyfish.jaro_winkler(b1, b2)
+    c = jellyfish.jaro_winkler(c1, c2)
+    p = jellyfish.jaro_winkler(p1, p2)
+    
+    print('Ball Bearing -> bll brng: ', b)
+    print('Centrifugal -> centrifigal: ', c)
+    print('PUmp -> pmp: ', p)
     
 def mrc():
     # english  -----------------------------
@@ -135,6 +245,14 @@ def mrc():
     for i in tokens:
         print(jellyfish.match_rating_codex(i), ' | ', end='')
         
+    # print string match comparisons
+    print('\n', end="")
+    print('Comparisons: ', end='')
+    print('Ball Bearing, bll brng: ', jellyfish.match_rating_comparison('Ball Bearing', 'bll brng'))    
+    print('Centrifugal, centrifigal: ', jellyfish.match_rating_comparison('Centrifugal', 'centrifigal')) 
+    print('PUmp, pmp: ', jellyfish.match_rating_comparison('PUmp', 'pmp'))
+            
+        
     # german  -----------------------------
     tokens = ['Kugellager',
               'kugelagr', 
@@ -143,7 +261,7 @@ def mrc():
               'PUmpe', 
               'pmp']
     
-    print('\n\nRunning Match Rating Codex (DE)...')
+    print('\n\nRunning Match Rating Codex Comparison (DE)...')
     
     # print tokens
     print('Tokens: ', end='')
@@ -159,7 +277,7 @@ def mrc():
     # print string match comparisons
     print('\n', end="")
     print('Comparisons: ', end='')
-    print('Kugellager, kugelagr: ', jellyfish.match_rating_comparison('Kugellager', 'kugelagr'))    
+    print('Kugellager,  kugelagr: ', jellyfish.match_rating_comparison('Kugellager', 'kugelagr'))    
     print('Zentrifugal, zentrifkl: ', jellyfish.match_rating_comparison('Zentrifugal', 'zentrifkl')) 
     print('PUmpe, pmp: ', jellyfish.match_rating_comparison('PUmpe', 'pmp'))
     
