@@ -76,6 +76,37 @@ def parser():
     print(infile.read(), '\n')
     infile.seek(0) # reset cursor
     
+    
+    # test
+    infile.seek(0) # reset cursor
+    data = infile.read()
+    nlpData = nlp(data)
+    
+    print('Find dependency objects: ----------------------')
+    '''
+    for ent in nlpData.ents:
+        print('{} --> {}'.format(ent.string, ent.label_))
+
+    print('\n')
+    '''
+    
+    for sent in nlpData.sents:
+        for token in sent:
+            print(token.text, token.dep_, token.head.text, token.head.pos_, [child for child in token.children])
+    
+    infile.close()
+    # ----  end function  ----
+
+def ner():
+    # print('The ner module is disconnected...')
+    print('Running Named Entity Recognizer...\n')
+    
+    # read in the product descriptions
+    print('read product descriptions: --------')
+    infile = open('products_DescriptionOnly_short.csv', 'rt')
+    print(infile.read(), '\n')
+    infile.seek(0) # reset cursor
+    
     # test
     infile.seek(0) # reset cursor
     data = infile.read()
@@ -87,11 +118,6 @@ def parser():
     print('\n')
     
     infile.close()
-    # ----  end function  ----
-
-def ner():
-    print('The ner module is disconnected...')
-    
     # ----  end function  ----
 
 def matcher():
