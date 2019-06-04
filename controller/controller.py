@@ -13,11 +13,13 @@ rem: use case: convert us date to uk date
 import sys
 sys.path.append('jellyfish-mods/')
 sys.path.append('spacy-mods/')
+sys.path.append('dblMetaphone-mods/')
 
 import jf_distance
 import jf_phoneme
 import jf_match
 import spacy_modules
+import dm_doubleMetaphone
 
 # py libs
 import spacy
@@ -40,7 +42,7 @@ def menu():
     print('\nPHONETIC ENCODING:\t STRING COMPARISON:')
     print('6  -  Soundex\t\t 8  -  Levenshtein Distance')
     print('7  -  NYSIIS\t\t 9  -  Jaro-Winkler Distance')
-    print('              \t\t 0  -  Match Rating Codex')
+    print('7b -  Double Metaphone\t 0  -  Match Rating Codex')
     # print('\n')
     print('----------------------------------------------------')
     # ----  end function  ----
@@ -49,7 +51,7 @@ def menu():
 # controller program for nlp functions
 def main():
     # declare menu items
-    menuItems = ['m','1','2','3','4','5','6','7','8','9', '0']
+    menuItems = ['m','1','2','3','4','5','6','7', '7b', '8','9', '0']
     
     # print menu to console
     menu()
@@ -76,6 +78,7 @@ def main():
             if choice == '5': spacy_modules.matcher()
             if choice == '6': jf_phoneme.soundex()
             if choice == '7': jf_phoneme.nysiis()
+            if choice == '7b': dm_doubleMetaphone.dlbMetaphone()
             if choice == '8': jf_distance.levenshtein()
             if choice == '9': jf_distance.jaroWinkler()
             if choice == '0': jf_match.mrc()
