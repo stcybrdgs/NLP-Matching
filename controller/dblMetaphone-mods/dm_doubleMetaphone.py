@@ -17,6 +17,9 @@ def dlbMetaphone():
     for item in strings:
         rStr = item + str(i)
         print(item, '->', doublemetaphone(rStr))
+        result = doublemetaphone(rStr)
+        print('Double Metaphone [0]: ', result[0])
+        print('Double Metaphone [1]: ', result[1])
     
     # ----  end function  ----
     
